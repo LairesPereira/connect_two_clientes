@@ -15,7 +15,6 @@ PORT = 5050 # Setar uma porta que esteja livre para a comunicação
 SERVER = socket.gethostbyname('localhost')
 # SERVER = '172.16.63.147'
 
-
 ADDR = (SERVER, PORT)
 
 # Primeiro arg diz ao socket que tipo de endereços vamos trabalhar
@@ -28,29 +27,20 @@ def handle_client(conn, addr):
 
     print(f'[NOVA CONEXÃO]: {addr} conectado!')
 
-    
     connected = True
     while connected:
         msg_length = conn.recv(HEADER).decode(FORMAT)
         if(msg_length):
             msg_length = int(msg_length)
             msg = conn.recv(msg_length).decode(FORMAT)
-            print(msg)
-            print(conn.recv(msg_length))
             if(msg == DISCONECT):
                 connected = False
 
             print(f'[{addr}]: {msg}')
-            
-        # if(clients_conected == 1):
-        #     print('[INFORMACAO]: Aguardando o segundo jogador se conectar!')
-        # else:
-        #     print('[INFORMACAO]: Todos os jogadores conectados!')
-        
+            conn.send('Mensagem recevida'.encode(FORMAT))
         
     conn.close()
     
-
 # Permitir o servidor iniciar novas conexoes e passalas para handle_cliente que
 # irá rodar essas conexoes em uma nova thread
 def start():
